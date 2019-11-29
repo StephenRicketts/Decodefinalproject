@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
+import TenantSignup from "./tenantSignup.jsx";
 
 class App extends Component {
-    render = () => {
-        return "Hello world!"
-    }
+  render = () => {
+    return <TenantSignup />;
+  };
 }
 
-
-export default App
+export default App;
