@@ -38,8 +38,69 @@ let generateId = () => {
   return "" + Math.floor(Math.random() * 100000000);
 };
 
-app.post("/tenantsignup", upload.single("img"), (req, res) => {
+app.post("/tenantsignup", (req, res) => {
   console.log("tenantsignup server hit");
+  console.log("this is the body", req.body);
+  let password = req.body.password;
+  let email = req.body.email;
+  dbo.collection("tenants").findOne(
+    {
+      email: email
+    },
+    (err, user) => {
+      if (err) {
+        console.log("THIS IS AN ERROR");
+        res.send(
+          JSON.stringify({
+            success: false
+          })
+        );
+        return;
+      }
+      if (email !== null) {
+        console.log("EMAIL IS NOT NULL");
+        res.send(
+          JSON.stringify({
+            success: false
+          })
+        );
+        return;
+      }
+      if (email === null) {
+        console.log("COLLECTIONS HIT");
+        dbo.collection("tenants").insertOne(
+          {
+            email: email,
+            password: password
+          },
+          (error, insertedTenant) => {
+            if (error) {
+              console.log("error inserting tenant:", error);
+              res.send(
+                JSON.stringify({
+                  success: false
+                })
+              );
+              return;
+            }
+            let sessionId = generateId();
+            sessions[sessionId] = name;
+            res.cookie("sid", sessionId);
+            res.send(
+              JSON.stringify({
+                success: true
+              })
+            );
+            return;
+          }
+        );
+      }
+    }
+  );
+});
+
+app.post("/landlordsignup", upload.single("img"), (req, res) => {
+  console.log("landsignup server hit");
   console.log("this is the body", req.body);
   let name = req.body.username;
   let pwd = req.body.password;
@@ -47,7 +108,7 @@ app.post("/tenantsignup", upload.single("img"), (req, res) => {
   let email = req.body.email;
   let imgPath = "/uploads/" + file.filename;
   console.log("backend image", imgPath);
-  dbo.collection("tenants").findOne(
+  dbo.collection("landlords").findOne(
     {
       username: name
     },
@@ -69,16 +130,16 @@ app.post("/tenantsignup", upload.single("img"), (req, res) => {
         return;
       }
       if (user === null) {
-        dbo.collection("tenants").insertOne(
+        dbo.collection("landlords").insertOne(
           {
             username: name,
             password: pwd,
             email: email,
             image: imgPath
           },
-          (error, insertedTenant) => {
+          (error, insertedLandlord) => {
             if (error) {
-              console.log("error inserting tenant:", error);
+              console.log("error inserting landlord:", error);
               res.send(
                 JSON.stringify({
                   success: false

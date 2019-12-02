@@ -9,12 +9,21 @@ let reducer = (state, action) => {
       username: action.username
     };
   }
+  if (action.type === "landlord-signup-success") {
+    console.log("reducer hit");
+    return {
+      ...state,
+      login: true,
+      username: action.username
+    };
+  }
+  return state;
 };
 
 let store = createStore(
   reducer,
   {
-    tenants: [],
+    username: "",
     login: false
   },
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

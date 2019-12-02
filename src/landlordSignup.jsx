@@ -5,10 +5,15 @@ class UnconnectedTenantSignup extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      username: "",
       password: "",
-      email: ""
+      email: "",
+      img: null
     };
   }
+  handleUsernameChange = event => {
+    this.setState({ username: event.target.value });
+  };
 
   handlePasswordChange = event => {
     this.setState({ password: event.target.value });
@@ -17,53 +22,64 @@ class UnconnectedTenantSignup extends Component {
   handleEmailChange = event => {
     this.setState({ email: event.target.value });
   };
+  userImgHandler = event => {
+    this.setState({ img: event.target.files[0] });
+  };
 
-  tenantSignupHandler = async evt => {
+  landlordSignupHandler = async evt => {
     evt.preventDefault();
 
     let data = new FormData();
-    console.log("this is the front end data", this.state.email);
-    console.log("email", this.state.email);
-    data.append("email", this.state.email);
-    console.log("password", this.state.password);
+    console.log("this is the front end data", this.state.username);
+    data.append("username", this.state.username);
     data.append("password", this.state.password);
-    let response = await fetch("/tenantsignup", {
+    data.append("email", this.state.email);
+    data.append("img", this.state.img);
+    let response = await fetch("/landlordsignup", {
       method: "POST",
       body: data,
       credentials: "include"
     });
-    console.log("tenant signup response", response);
+    console.log("landlord signup response", response);
     let responseBody = await response.text();
-    console.log("response body", responseBody);
     let body = JSON.parse(responseBody);
-    console.log("tenant sign up body", body);
+    console.log("landlord sign up body", body);
     if (!body.success) {
       alert("Sign up has failed, please choose another username");
       return;
     }
     alert("Sign up successful! Welcome to Tenant Rex");
     this.props.dispatch({
-      type: "tenant-signup-success",
+      type: "landlord-signup-success",
       username: this.state.username
     });
     console.log("after dispatch");
-    this.setState({ password: "", email: "" });
+    this.setState({ username: "", password: "", email: "", img: null });
   };
   render() {
     return (
       <div>
-        Tenant sign up form
-        <form onSubmit={this.tenantSignupHandler}>
+        Landlord sign up form
+        <form onSubmit={this.landlordSignupHandler}>
           <div>
             Enter your email here!
             <input type="text" onChange={this.handleEmailChange} />
+          </div>
+          <div>
+            Please enter a username. This will be presented in your profile,
+            feel free to use your real name.
+            <input type="text" onChange={this.handleUsernameChange} />
           </div>
           <div>
             Please enter a password for your account
             <input type="text" onChange={this.handlePasswordChange} />
           </div>
           <div>
-            <input type="submit" value="create your account" />
+            Please add a photo of yourself!
+            <input type="file" onChange={this.userImgHandler} />
+            <div>
+              <input type="submit" value="create your account" />
+            </div>
           </div>
         </form>
       </div>
@@ -71,5 +87,5 @@ class UnconnectedTenantSignup extends Component {
   }
 }
 
-let TenantSignup = connect()(UnconnectedTenantSignup);
-export default TenantSignup;
+let LandlordSignup = connect()(UnconnectedTenantSignup);
+export default LandlordSignup;
