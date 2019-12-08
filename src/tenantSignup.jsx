@@ -5,10 +5,14 @@ class UnconnectedTenantSignup extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      username: "",
       password: "",
       email: ""
     };
   }
+  handleUsernameChange = event => {
+    this.setState({ username: event.target.value });
+  };
 
   handlePasswordChange = event => {
     this.setState({ password: event.target.value });
@@ -23,10 +27,10 @@ class UnconnectedTenantSignup extends Component {
 
     let data = new FormData();
     console.log("this is the front end data", this.state.email);
-    console.log("email", this.state.email);
+    data.append("username", this.state.username);
     data.append("email", this.state.email);
-    console.log("password", this.state.password);
     data.append("password", this.state.password);
+
     let response = await fetch("/tenantsignup", {
       method: "POST",
       body: data,
@@ -47,13 +51,17 @@ class UnconnectedTenantSignup extends Component {
       username: this.state.username
     });
     console.log("after dispatch");
-    this.setState({ password: "", email: "" });
+    this.setState({ username: "", password: "", email: "" });
   };
   render() {
     return (
       <div>
         Tenant sign up form
         <form onSubmit={this.tenantSignupHandler}>
+          <div>
+            Enter a username here!
+            <input type="text" onChange={this.handleUsernameChange} />
+          </div>
           <div>
             Enter your email here!
             <input type="text" onChange={this.handleEmailChange} />

@@ -27,7 +27,9 @@ MongoClient.connect(
     useNewUrlParser: true
   },
   (err, db) => {
-    console.log("this is an error", err);
+    if (err) {
+      console.log("this is an error", err);
+    }
     dbo = db.db("TRDB");
   }
 );
@@ -38,79 +40,56 @@ let generateId = () => {
   return "" + Math.floor(Math.random() * 100000000);
 };
 
-app.post("/tenantsignup", (req, res) => {
-  console.log("tenantsignup server hit");
+app.get("/matches", (req, res) => {
+  console.log("matches server hit");
   console.log("this is the body", req.body);
-  let password = req.body.password;
-  let email = req.body.email;
-  dbo.collection("tenants").findOne(
-    {
-      email: email
-    },
-    (err, user) => {
-      if (err) {
-        console.log("THIS IS AN ERROR");
-        res.send(
-          JSON.stringify({
-            success: false
-          })
-        );
-        return;
-      }
-      if (email !== null) {
-        console.log("EMAIL IS NOT NULL");
-        res.send(
-          JSON.stringify({
-            success: false
-          })
-        );
-        return;
-      }
-      if (email === null) {
-        console.log("COLLECTIONS HIT");
-        dbo.collection("tenants").insertOne(
-          {
-            email: email,
-            password: password
-          },
-          (error, insertedTenant) => {
-            if (error) {
-              console.log("error inserting tenant:", error);
-              res.send(
-                JSON.stringify({
-                  success: false
-                })
-              );
-              return;
-            }
-            let sessionId = generateId();
-            sessions[sessionId] = name;
-            res.cookie("sid", sessionId);
-            res.send(
-              JSON.stringify({
-                success: true
-              })
-            );
-            return;
-          }
-        );
-      }
-    }
-  );
+  let from = req.body.from;
+  let to = req.body.to;
+  dbo.collection("matches").insertOne({ requester: from, requested: to });
 });
 
-app.post("/landlordsignup", upload.single("img"), (req, res) => {
-  console.log("landsignup server hit");
+app.get("/allprofiles", (req, res) => {
+  console.log("all profiles server hit");
+  dbo
+    .collection("roommateProfiles")
+    .find({})
+    .toArray((err, products) => {
+      if (err) {
+        res.send(
+          JSON.stringify({
+            success: false
+          })
+        );
+        return;
+      }
+
+      products = products.slice().reverse();
+      res.send(JSON.stringify(products));
+    });
+});
+
+app.post("/roommateSignup", upload.single("img"), (req, res) => {
+  console.log("roommate signup server hit");
   console.log("this is the body", req.body);
-  let name = req.body.username;
+  console.log("preferences", req.body.preferences);
+  let username = req.body.username;
   let pwd = req.body.password;
+  let firstName = req.body.name;
+  let age = req.body.age;
+  let profession = req.body.profession;
+  let priceRange = req.body.priceRange;
+  let gender = req.body.gender;
+  let pets = req.body.pets;
+  let astroSign = req.body.astroSign;
+  let preferences = req.body.preferences;
   let file = req.file;
   let email = req.body.email;
   let imgPath = "/uploads/" + file.filename;
+  let location = req.body.location;
   console.log("backend image", imgPath);
-  dbo.collection("landlords").findOne(
+  dbo.collection("roommateProfiles").findOne(
     {
-      username: name
+      username: username
     },
     (err, user) => {
       if (err) {
@@ -130,14 +109,23 @@ app.post("/landlordsignup", upload.single("img"), (req, res) => {
         return;
       }
       if (user === null) {
-        dbo.collection("landlords").insertOne(
+        dbo.collection("roommateProfiles").insertOne(
           {
-            username: name,
+            username: username,
             password: pwd,
             email: email,
-            image: imgPath
+            image: imgPath,
+            firstName: firstName,
+            age: age,
+            profession: profession,
+            priceRange: priceRange,
+            gender: gender,
+            pets: pets,
+            astroSign: astroSign,
+            preferences: preferences,
+            location: location
           },
-          (error, insertedLandlord) => {
+          (error, insertedRoommateProfile) => {
             if (error) {
               console.log("error inserting landlord:", error);
               res.send(
@@ -148,7 +136,7 @@ app.post("/landlordsignup", upload.single("img"), (req, res) => {
               return;
             }
             let sessionId = generateId();
-            sessions[sessionId] = name;
+            sessions[sessionId] = username;
             res.cookie("sid", sessionId);
             res.send(
               JSON.stringify({
@@ -159,6 +147,55 @@ app.post("/landlordsignup", upload.single("img"), (req, res) => {
           }
         );
       }
+    }
+  );
+});
+
+app.post("/login", upload.none(), (req, res) => {
+  console.log("login server hit");
+  console.log("this is the username", req.body.username);
+  let name = req.body.username;
+  console.log("this is the password", req.body.password);
+  let password = req.body.password;
+  dbo.collection("roommateProfiles").findOne(
+    {
+      username: name
+    },
+    (err, user) => {
+      if (err) {
+        console.log("this is an error");
+        res.send(
+          JSON.stringify({
+            success: false
+          })
+        );
+        return;
+      }
+      if (user === null) {
+        console.log("user equals null");
+        res.send(
+          JSON.stringify({
+            success: false
+          })
+        );
+        return;
+      }
+      if (user.password === password) {
+        let sessionId = generateId();
+        sessions[sessionId] = name;
+        res.cookie("sid", sessionId);
+        res.send(
+          JSON.stringify({
+            success: true
+          })
+        );
+        return;
+      }
+      res.send(
+        JSON.stringify({
+          success: false
+        })
+      );
     }
   );
 });

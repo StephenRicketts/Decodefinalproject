@@ -5,13 +5,21 @@ class UnconnectedRoommateForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      username: "",
       priceRange: "",
       gender: "",
       age: "",
       pets: "",
-      preferences: ""
+      preferences: "",
+      img: null
     };
   }
+  userImgHandler = evt => {
+    this.setState({ img: event.target.files[0] });
+  };
+  usernameHandler = evt => {
+    this.setState({ username: evt.target.value });
+  };
   priceRangeHandler = evt => {
     this.setState({ priceRange: evt.target.value });
   };
@@ -30,11 +38,14 @@ class UnconnectedRoommateForm extends Component {
   submitHandler = async evt => {
     evt.preventDefault();
     let data = new FormData();
+    console.log("this is the submit handler", this.state.priceRange);
+    data.append("username", this.state.username);
     data.append("priceRange", this.state.priceRange);
     data.append("gender", this.state.gender);
     data.append("age", this.state.age);
     data.append("pets", this.state.pets);
-    data.append("preference", this.state.preferences);
+    data.append("preferences", this.state.preferences);
+    data.append("img", this.state.img);
     let response = await fetch("/roommate-profile", {
       method: "POST",
       body: data,
@@ -48,6 +59,7 @@ class UnconnectedRoommateForm extends Component {
     }
     alert("Your profile has been created!");
     this.setState({
+      username: "",
       priceRange: "",
       gender: "",
       age: "",
@@ -64,7 +76,7 @@ class UnconnectedRoommateForm extends Component {
           <div>
             Please enter a username. This will be presented in your profile,
             feel free to use your real name.
-            <input type="text" onChange={this.handleUsernameChange} />
+            <input type="text" onChange={this.usernameHandler} />
           </div>
           <div>
             Please add a photo of yourself!
