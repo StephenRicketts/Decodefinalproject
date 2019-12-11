@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./ProfilesDisplay.css";
+import { Link } from "react-router-dom";
 
 class UnconnectedProfilesDisplay extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      profiles: [],
-      matches: []
+      profiles: []
     };
   }
   componentDidMount = async () => {
@@ -16,8 +16,7 @@ class UnconnectedProfilesDisplay extends Component {
     let parsedProfiles = JSON.parse(responseBody);
     this.setState({ profiles: parsedProfiles });
   };
-  yesHandler = (to, from) => {
-    preventDefault();
+  yesHandler = async (to, from) => {
     let data = new FormData();
     data.append("from", from);
     data.append("to", to);
@@ -26,18 +25,41 @@ class UnconnectedProfilesDisplay extends Component {
       body: data,
       credentials: "include"
     });
-    console.log("signup response", response);
     let responseBody = await response.text();
     let body = JSON.parse(responseBody);
-    console.log("signup body", body);
+    console.log("match body", body.status);
+    if (body.status === "matched") {
+      alert("You have a match!");
+      let matchedProfileData = new FormData();
+      console.log("this is the target profile", to);
+      matchedProfileData.append("matchedProfile", to);
+      let matchedProfileResponse = await fetch("/getMatchedProfile", {
+        method: "POST",
+        body: matchedProfileData,
+        credentials: "include"
+      });
+      let matchedProfileResponseBody = await matchedProfileResponse.text();
+      let parsedMatchedProfile = JSON.parse(matchedProfileResponseBody);
+      console.log("parsed matched profile", parsedMatchedProfile);
+
+      this.props.dispatch({
+        type: "matched-profile",
+        matchedProfile: parsedMatchedProfile
+      });
+      return;
+    }
   };
 
   render() {
     return (
       <div>
+        <Link to="/messengerlist">Messenger</Link>
         <div>
           {this.state.profiles.map(profile => {
             console.log("image", profile.image);
+            if (profile.username === this.props.profile.username) {
+              return;
+            }
             return (
               <div className="profile-container">
                 <img src={profile.image} />
@@ -82,7 +104,7 @@ class UnconnectedProfilesDisplay extends Component {
 let mapStateToProps = state => {
   return {
     username: state.username,
-    profiles: state.profiles
+    profile: state.profile
   };
 };
 let ProfilesDisplay = connect(mapStateToProps)(UnconnectedProfilesDisplay);

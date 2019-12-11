@@ -40,12 +40,92 @@ let generateId = () => {
   return "" + Math.floor(Math.random() * 100000000);
 };
 
-app.get("/matches", (req, res) => {
+app.post("/getMatchedProfile", upload.none(), (req, res) => {
+  console.log("get matched profile server hit");
+  let matchedUserName = req.body.matchedProfile;
+  dbo
+    .collection("roommateProfiles")
+    .findOne({ username: matchedUserName }, (err, profile) => {
+      if (err) {
+        console.log("error finding profile");
+        return;
+      }
+      res.send(JSON.stringify(profile));
+    });
+});
+
+app.post("/getProfile", upload.none(), (req, res) => {
+  console.log("get profile server hit");
+  console.log("this is the body", req.body);
+  let username = req.body.username;
+  dbo
+    .collection("roommateProfiles")
+    .findOne({ username: username }, (err, profile) => {
+      if (err) {
+        console.log("error finding profile");
+        return;
+      }
+      res.send(JSON.stringify(profile));
+    });
+});
+
+app.post("/matches", upload.none(), (req, res) => {
   console.log("matches server hit");
   console.log("this is the body", req.body);
   let from = req.body.from;
   let to = req.body.to;
-  dbo.collection("matches").insertOne({ requester: from, requested: to });
+  dbo
+    .collection("matches")
+    .findOne({ requester: to, requested: from }, (err, match) => {
+      if (err) {
+        console.log("error during match find");
+        res.send(
+          JSON.stringify({
+            status: "failed"
+          })
+        );
+        return;
+      }
+      if (match !== null) {
+        console.log("this is a match");
+        //do something to delete request
+        let generateMatchId = () => {
+          return "" + Math.floor(Math.random() * 100000000);
+        };
+        let matchId = generateMatchId();
+
+        dbo
+          .collection("roommateProfiles")
+          .updateOne(
+            { username: from },
+            { $push: { matches: { candidate: to, matchId: matchId } } }
+          );
+        dbo
+          .collection("roommateProfiles")
+          .updateOne(
+            { username: to },
+            { $push: { matches: { candidate: from, matchId: matchId } } }
+          );
+        dbo.collection("matches");
+        res.send(
+          JSON.stringify({
+            status: "matched"
+          })
+        );
+        return;
+      }
+      if (match === null) {
+        console.log("inserting match");
+        dbo.collection("matches").insertOne({ requester: from, requested: to });
+        res.send(
+          JSON.stringify({
+            status: "Match-inserted"
+          })
+        );
+        return;
+      }
+      res.json({ status: "failed" });
+    });
 });
 
 app.get("/allprofiles", (req, res) => {

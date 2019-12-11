@@ -9,9 +9,11 @@ class UnconnectedLogin extends Component {
     this.state = {
       username: "",
       password: "",
-      redirect: false
+      redirect: false,
+      profile: []
     };
   }
+
   handleUsernameChange = event => {
     this.setState({ username: event.target.value });
   };
@@ -39,10 +41,20 @@ class UnconnectedLogin extends Component {
       alert("login failed");
       return;
     }
-    console.log("this.state.username", this.state.username);
+    let profileData = new FormData();
+    profileData.append("username", this.state.username);
+    let getProfileResponse = await fetch("/getProfile", {
+      method: "POST",
+      body: profileData,
+      credentials: "include"
+    });
+    let getProfileResponseBody = await getProfileResponse.text();
+    let parsedProfile = JSON.parse(getProfileResponseBody);
+    console.log("get profile response", parsedProfile);
     this.props.dispatch({
       type: "login-success",
-      username: this.state.username
+      username: this.state.username,
+      profile: parsedProfile
     });
 
     alert("login-successful");

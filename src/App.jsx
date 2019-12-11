@@ -4,9 +4,9 @@ import { BrowserRouter, Route } from "react-router-dom";
 import Login from "./login.jsx";
 import RoommateSignup from "./signUp.jsx";
 import ProfilesDisplay from "./ProfilesDisplay.jsx";
+import MessengerList from "./messengerList.jsx";
 
 class App extends Component {
-  componentDidMount = async () => {};
   renderHome = () => {
     return <Login />;
   };
@@ -15,6 +15,15 @@ class App extends Component {
   };
   renderProfilesToDisplay = () => {
     return <ProfilesDisplay />;
+  };
+  renderMessengerList = () => {
+    return <MessengerList />;
+  };
+  renderMessengerPage = routerData => {
+    let convoId = routerData.match.params._id;
+    let convo = this.props.profile.matches.matchId.find(match => {
+      return convoId === convo;
+    });
   };
   render = () => {
     return (
@@ -26,6 +35,16 @@ class App extends Component {
             exact={true}
             path="/profilesdisplay"
             render={this.renderProfilesToDisplay}
+          />
+          <Route
+            exact={true}
+            path="/messengerlist"
+            render={this.renderMessengerList}
+          />
+          <Route
+            exact={true}
+            path="/messengerlist:_id"
+            render={this.renderMessengerPage}
           />
         </div>
       </BrowserRouter>

@@ -107,7 +107,23 @@ class UnconnectedRoomateSignup extends Component {
     alert("Sign up successful! Welcome to Roommate finder!");
     this.props.dispatch({
       type: "signup-success",
-      username: this.state.username
+      username: this.state.username,
+      profile: {
+        name: this.state.name,
+        username: this.state.username,
+        age: this.state.age,
+        priceRange: this.state.priceRange,
+        pets: this.state.pets,
+        profession: this.state.profession,
+        gender: this.state.gender,
+        password: this.state.password,
+        email: this.state.email,
+        img: this.state.img,
+        astroSign: this.state.astroSign,
+        numbRoommates: this.state.numbRoommates,
+        preferences: this.state.preferences,
+        location: this.state.location
+      }
     });
 
     this.setState({ redirect: true });

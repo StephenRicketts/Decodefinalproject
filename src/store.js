@@ -1,12 +1,12 @@
 import { createStore } from "redux";
 
 let reducer = (state, action) => {
-  if (action.type === "tenant-signup-success") {
+  if (action.type === "matched-profile") {
     console.log("reducer hit");
+    console.log("matched profiles action", action.matchedProfile);
     return {
       ...state,
-      login: true,
-      username: action.username
+      matchedProfiles: state.matchedProfiles.concat(action.matchedProfile)
     };
   }
   if (action.type === "login-success") {
@@ -14,19 +14,18 @@ let reducer = (state, action) => {
     return {
       ...state,
       login: true,
-      username: action.username
+      username: action.username,
+      profile: action.profile
     };
   }
-  if (action.type === "set-profiles") {
+  if (action.type === "signup-success") {
     console.log("reducer hit");
     return {
       ...state,
-      profiles: action.profiles
+      login: true,
+      username: action.username,
+      profile: action.profile
     };
-  }
-  if (action.type === "signup-matchCode") {
-    console.log("reducer 2 hit");
-    return { ...state };
   }
   return state;
 };
@@ -36,7 +35,8 @@ let store = createStore(
   {
     username: "",
     login: false,
-    profiles: []
+    profile: [],
+    matchedProfiles: []
   },
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
