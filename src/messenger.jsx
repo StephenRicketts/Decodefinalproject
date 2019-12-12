@@ -11,12 +11,12 @@ class UnconnectedMessenger extends Component {
   messageHandler = evt => {
     this.setState({ message: evt.target.value });
   };
-  messageSubmitHandler = evt => {
+  messageSubmitHandler = async evt => {
     evt.preventDefault();
     let data = new FormData();
     data.append("message", this.state.message);
     data.append("sender", this.props.profile.username);
-    data.append("matchId", this.props.profile.matches.matchId)
+    data.append("matchId", this.props.convo);
     let response = await fetch("/messages", {
       method: "POST",
       body: data,
@@ -25,13 +25,19 @@ class UnconnectedMessenger extends Component {
     let responseBody = await response.text();
 
     let body = JSON.parse(responseBody);
+    console.log("this is the boy", body);
   };
   render() {
+    console.log("this should be convo id", this.props.convo);
     return (
       <div>
         <div>
+          {this.props.convo}
           <form onSubmit={this.messageSubmitHandler}>
-            <input type="text" onChange={this.messageHandler} />
+            <div>
+              <input type="text" onChange={this.messageHandler} />
+              <input type="submit" value="send" />
+            </div>
           </form>
         </div>
       </div>

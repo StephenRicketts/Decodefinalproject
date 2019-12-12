@@ -15,6 +15,36 @@ class UnconnectedProfilesDisplay extends Component {
     let responseBody = await response.text();
     let parsedProfiles = JSON.parse(responseBody);
     this.setState({ profiles: parsedProfiles });
+    let matchesData = new FormData();
+    matchesData.append("username", this.props.username);
+    let matchesResponse = await fetch("/allmatches", {
+      method: "POST",
+      body: matchesData,
+      credentials: "include"
+    });
+    let matchesResponseBody = await matchesResponse.text();
+    let parsedAllMatches = JSON.parse(matchesResponseBody);
+    let myMatchUserNames = parsedAllMatches.matches.map(match => {
+      if (match.requested === this.props.username) {
+        return match.requester;
+      }
+      if (match.requester === this.props.username) {
+        return match.requested;
+      }
+    });
+    let matchForm = new FormData();
+    matchForm.append("matches", JSON.stringify(myMatchUserNames));
+    let resp = await fetch("/displayMyMatches", {
+      method: "POST",
+      body: matchForm,
+      credentials: "include"
+    });
+    let respText = await resp.text();
+    let parsedMatchProfiles = JSON.parse(respText);
+    this.props.dispatch({
+      type: "all-matches",
+      allMatches: parsedMatchProfiles.profiles
+    });
   };
   yesHandler = async (to, from) => {
     let data = new FormData();

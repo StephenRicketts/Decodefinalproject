@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 class UnconnectedMessengerList extends Component {
   render() {
@@ -9,7 +10,14 @@ class UnconnectedMessengerList extends Component {
         <ul>
           {console.log("profile matches", this.props.profile.matches)}
           {this.props.profile.matches.map(match => {
-            return <li>{match.candidate}</li>;
+            console.log("matches", match);
+            return (
+              <li>
+                <Link to={"/messengerlist/:" + match.matchId}>
+                  {match.candidate}
+                </Link>
+              </li>
+            );
           })}
         </ul>
       </div>

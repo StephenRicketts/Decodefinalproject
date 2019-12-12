@@ -40,6 +40,67 @@ let generateId = () => {
   return "" + Math.floor(Math.random() * 100000000);
 };
 
+app.post("/messages", upload.none(), (req, res) => {
+  console.log("message server hit");
+  let message = req.body.message;
+  let matchId = req.body.matchId;
+  console.log("this should be the message", message);
+  console.log("this should be the matchId", matchId);
+  dbo.collection("messages").insertOne({ convoId: matchId, message: message }),
+    (err, message) => {
+      if (err) {
+        console.log("error inserting message");
+        return;
+      }
+      console.log("message inserted");
+      return;
+    };
+});
+
+app.post("/displayMyMatches", upload.none(), (req, res) => {
+  console.log("req.body.matches", req.body.matches);
+  let usernames = JSON.parse(req.body.matches);
+  console.log("names of matches, getting profiles", usernames);
+  dbo
+    .collection("roommateProfiles")
+    .find({ username: { $in: usernames } })
+    .toArray((err, profiles) => {
+      if (err) {
+        console.log("error finding matched profiles");
+        res.send(
+          JSON.stringify({
+            success: false
+          })
+        );
+        return;
+      }
+      console.log("before res.json", profiles);
+      res.json({ success: true, profiles: profiles });
+      return;
+    });
+});
+
+app.post("/allmatches", upload.none(), (req, res) => {
+  console.log("all matches server hit");
+  let username = req.body.username;
+  dbo
+    .collection("matches")
+    .find({
+      $or: [
+        { requested: username, accepted: true },
+        { requester: username, accepted: true }
+      ]
+    })
+    .toArray((err, matches) => {
+      if (err) {
+        console.log("error in finding all matches");
+        return;
+      }
+      console.log("back end, this should be the matches", matches);
+      res.send(JSON.stringify({ matches }));
+    });
+});
+
 app.post("/getMatchedProfile", upload.none(), (req, res) => {
   console.log("get matched profile server hit");
   let matchedUserName = req.body.matchedProfile;
@@ -88,7 +149,7 @@ app.post("/matches", upload.none(), (req, res) => {
       }
       if (match !== null) {
         console.log("this is a match");
-        //do something to delete request
+
         let generateMatchId = () => {
           return "" + Math.floor(Math.random() * 100000000);
         };
@@ -106,6 +167,9 @@ app.post("/matches", upload.none(), (req, res) => {
             { username: to },
             { $push: { matches: { candidate: from, matchId: matchId } } }
           );
+        dbo
+          .collection("matches")
+          .updateOne({ requested: from }, { $set: { accepted: true } });
         dbo.collection("matches");
         res.send(
           JSON.stringify({
@@ -116,7 +180,9 @@ app.post("/matches", upload.none(), (req, res) => {
       }
       if (match === null) {
         console.log("inserting match");
-        dbo.collection("matches").insertOne({ requester: from, requested: to });
+        dbo
+          .collection("matches")
+          .insertOne({ requester: from, requested: to, accepted: false });
         res.send(
           JSON.stringify({
             status: "Match-inserted"

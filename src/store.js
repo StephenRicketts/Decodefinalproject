@@ -1,6 +1,10 @@
 import { createStore } from "redux";
 
 let reducer = (state, action) => {
+  if (action.type === "all-matches") {
+    console.log("all matches reducer hit");
+    return { ...state, matchedProfiles: action.allMatches };
+  }
   if (action.type === "matched-profile") {
     console.log("reducer hit");
     console.log("matched profiles action", action.matchedProfile);

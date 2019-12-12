@@ -5,8 +5,9 @@ import Login from "./login.jsx";
 import RoommateSignup from "./signUp.jsx";
 import ProfilesDisplay from "./ProfilesDisplay.jsx";
 import MessengerList from "./messengerList.jsx";
+import Messenger from "./messenger.jsx";
 
-class App extends Component {
+class UnconnectedApp extends Component {
   renderHome = () => {
     return <Login />;
   };
@@ -21,9 +22,15 @@ class App extends Component {
   };
   renderMessengerPage = routerData => {
     let convoId = routerData.match.params._id;
-    let convo = this.props.profile.matches.matchId.find(match => {
-      return convoId === convo;
+    console.log("convoId", convoId);
+    console.log(
+      "this should be props of matches from profile",
+      this.props.profile.matches
+    );
+    let convo = this.props.profile.matches.find(match => {
+      return convoId === match.matchId;
     });
+    return <Messenger convo={convoId} />;
   };
   render = () => {
     return (
@@ -43,7 +50,7 @@ class App extends Component {
           />
           <Route
             exact={true}
-            path="/messengerlist:_id"
+            path="/messengerlist/:_id"
             render={this.renderMessengerPage}
           />
         </div>
@@ -52,4 +59,10 @@ class App extends Component {
   };
 }
 
+let mapStateToProps = state => {
+  return {
+    profile: state.profile
+  };
+};
+let App = connect(mapStateToProps)(UnconnectedApp);
 export default App;
