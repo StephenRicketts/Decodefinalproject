@@ -6,6 +6,7 @@ import RoommateSignup from "./signUp.jsx";
 import ProfilesDisplay from "./ProfilesDisplay.jsx";
 import MessengerList from "./messengerList.jsx";
 import Messenger from "./messenger.jsx";
+import TopBar from "./topBar.jsx";
 
 class UnconnectedApp extends Component {
   renderHome = () => {
@@ -36,6 +37,7 @@ class UnconnectedApp extends Component {
     return (
       <BrowserRouter>
         <div>
+          <TopBar />
           <Route exact={true} path="/" render={this.renderHome} />
           <Route exact={true} path="/signup" render={this.renderLogin} />
           <Route

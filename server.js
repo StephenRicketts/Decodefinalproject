@@ -15,7 +15,8 @@ app.use(cookieParser());
 reloadMagic(app);
 
 app.use("/", express.static("build")); // Needed for the HTML and JS files
-app.use("/", express.static("public")); // Needed for local assets
+app.use("/", express.static("public"));
+app.use("/uploads", express.static("uploads")); // Needed for local assets
 
 let dbo = undefined;
 let url =
@@ -40,6 +41,26 @@ let generateId = () => {
   return "" + Math.floor(Math.random() * 100000000);
 };
 
+app.post("/getRelevantMessages", upload.none(), (req, res) => {
+  console.log("getRelevantMessages server hit");
+  let matchId = req.body.matchId;
+  console.log("this should be the matchId", matchId);
+  dbo
+    .collection("messages")
+    .find({ convoId: matchId })
+    .toArray((err, messages) => {
+      if (err) {
+        console.log("error retrieving messages");
+      }
+      console.log("sending messages");
+      res.send(
+        JSON.stringify({
+          messages
+        })
+      );
+    });
+});
+
 app.post("/messages", upload.none(), (req, res) => {
   console.log("message server hit");
   let message = req.body.message;
@@ -60,7 +81,6 @@ app.post("/messages", upload.none(), (req, res) => {
 app.post("/displayMyMatches", upload.none(), (req, res) => {
   console.log("req.body.matches", req.body.matches);
   let usernames = JSON.parse(req.body.matches);
-  console.log("names of matches, getting profiles", usernames);
   dbo
     .collection("roommateProfiles")
     .find({ username: { $in: usernames } })
@@ -74,7 +94,6 @@ app.post("/displayMyMatches", upload.none(), (req, res) => {
         );
         return;
       }
-      console.log("before res.json", profiles);
       res.json({ success: true, profiles: profiles });
       return;
     });

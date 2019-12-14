@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+import "./signUp.css";
 
 class UnconnectedRoomateSignup extends Component {
   constructor(props) {
@@ -148,75 +149,91 @@ class UnconnectedRoomateSignup extends Component {
   render() {
     if (this.state.redirect) return <Redirect to="/profilesdisplay" />;
     return (
-      <div className="signup-form-container">
-        Roommate sign up form
-        <form onSubmit={this.RoomateSignupHandler}>
-          <div className="personal-form-container">
-            Personal info here!
-            <div>
-              Please create a username, this will be used to sign in.
-              <input type="text" onChange={this.handleUsernameChange} />
-            </div>
-            <div>
-              Please provide a password for your account.
-              <input type="text" onChange={this.handlePasswordChange} />
-            </div>
-            <div>
-              What is your first name? This will be presented on your profile.
-              <input type="text" onChange={this.handleNameChange} />
-            </div>
-            <div>
-              What city or town are you looking for find an apartment in?
-              <input type="text" onChange={this.locationHandler} />
-            </div>
-            <div>
-              Please provide a valid email address.
-              <input type="text" onChange={this.handleEmailChange} />
+      <div className="sign-up-form-container">
+        <div className="signup-form">
+          <h1>Addresser sign up form</h1>
+          <p>
+            Welcome to Addresser, the roommate finder! Please fill out the
+            following form to get matched up with people you want to share a
+            living space with!
+          </p>
+          <form
+            onSubmit={this.RoomateSignupHandler}
+            className="sign-up-questions"
+          >
+            <div className="personal-form-container">
+              <h1>Personal info here!</h1>
               <div>
-                Please provide your age, this will be presented on your profile.
-                <input type="number" onChange={this.handleAgeChange} />
+                Please create a username, this will be used to sign in.
+                <input type="text" onChange={this.handleUsernameChange} />
               </div>
               <div>
-                Please provide roughly the ammount you are looking to spend on
-                your share of rent per month.
-                <input type="text" onChange={this.handlePriceRangeChange} />
+                Please provide a password for your account.
+                <input type="text" onChange={this.handlePasswordChange} />
               </div>
               <div>
-                What is your current profession?
-                <input type="text" onChange={this.handleProfessionChange} />
+                What is your first name? This will be presented on your profile.
+                <input type="text" onChange={this.handleNameChange} />
               </div>
               <div>
-                How do you identify in terms of gender?
-                <input type="text" onChange={this.handleGenderChange} />
+                What city or town are you looking for find an apartment in?
+                <input type="text" onChange={this.locationHandler} />
               </div>
               <div>
-                Please provide a photograph of yourself to be presented on your
-                profile page.
-                <input type="file" onChange={this.userImgHandler} />
+                Please provide a valid email address.
+                <input type="text" onChange={this.handleEmailChange} />
+                <div>
+                  Please provide your age, this will be presented on your
+                  profile.
+                  <input type="number" onChange={this.handleAgeChange} />
+                </div>
+                <div>
+                  Please provide roughly the ammount you are looking to spend on
+                  your share of rent per month.
+                  <input type="text" onChange={this.handlePriceRangeChange} />
+                </div>
+                <div>
+                  What is your current profession?
+                  <input type="text" onChange={this.handleProfessionChange} />
+                </div>
+                <div>
+                  How do you identify in terms of gender?
+                  <input type="text" onChange={this.handleGenderChange} />
+                </div>
+                <div>
+                  Please provide a photograph of yourself to be presented on
+                  your profile page.
+                  <input type="file" onChange={this.userImgHandler} />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="preferences-form-container">
-            <div>
-              Do you have pets? if not, are you okay with living with other
-              people's pets?
-              <input type="text" onChange={this.handlePetsChange} />
+            <div className="preferences-form-container">
+              <div>
+                Do you have pets? if not, are you okay with living with other
+                people's pets?
+                <input type="text" onChange={this.handlePetsChange} />
+              </div>
+              <div>
+                What is your astrological sign? Maybe also let potential
+                roommates know if you think this question is irrelevant.
+                <input type="text" onChange={this.handleAstroSignChange} />
+              </div>
+              <div>
+                Finally, please provide your potential Roommates with any
+                additional info you think may be relevant.
+                <input type="text" onChange={this.preferencesHandler} />
+              </div>
             </div>
-            <div>
-              What is your astrological sign? Maybe also let potential roommates
-              know if you think this question is irrelevant.
-              <input type="text" onChange={this.handleAstroSignChange} />
+            <div className="sign-up-button-container">
+              <input type="submit" value="Creat your profile" />
             </div>
-            <div>
-              Finally, please provide your potential Roommates with any
-              additional info you think may be relevant.
-              <input type="text" onChange={this.preferencesHandler} />
-            </div>
-          </div>
-          <div className="sign-up-button-container">
-            <input type="submit" value="Creat your profile" />
-          </div>
-        </form>
+          </form>
+        </div>
+        <div className="right-side-image">
+          <h1>
+            <b>FIND YOUR PLACE.</b>
+          </h1>
+        </div>
       </div>
     );
   }

@@ -1,0 +1,52 @@
+.signup-form {
+  padding: 20px;
+  width: 700px;
+  top: 200px;
+  position: absolute;
+  left: 200px;
+  background: white;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  border-radius: 10px 50px 10px 10px;
+}
+.sign-up-form-container {
+  width: 500px;
+  display: flex;
+  justify-content: center;
+  background: black;
+  border-radius: 10px 50px 10px 10px;
+}
+.sign-up-questions {
+  position: absolute;
+  left: 20%;
+  box-shadow: 2px 2px 2px;
+  display: flex;
+  background: white;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  width: 800px;
+  padding: 30px;
+  border-radius: 10px;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+}
+.right-side-image {
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  font-size: 50px;
+  color: yellow;
+  border-radius: 10px 50px 10px 10px;
+  padding: 50px;
+  top: 210px;
+  background-image: url(https://images.unsplash.com/photo-1455459182396-ae46100617cb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1789&q=80);
+  width: 500px;
+  position: absolute;
+  display: flex;
+  /* background: white; */
+  left: 1300px;
+  height: 600px;
+  border: solid 5px yellow;
+}

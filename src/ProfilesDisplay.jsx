@@ -83,7 +83,6 @@ class UnconnectedProfilesDisplay extends Component {
   render() {
     return (
       <div>
-        <Link to="/messengerlist">Messenger</Link>
         <div>
           {this.state.profiles.map(profile => {
             console.log("image", profile.image);
@@ -91,36 +90,48 @@ class UnconnectedProfilesDisplay extends Component {
               return;
             }
             return (
-              <div className="profile-container">
-                <img src={profile.image} />
-                <div className="personal-info-container">
-                  <h1>{profile.firstName}</h1>
-                  <h2>Age, {profile.age}</h2>
-                  <div>
-                    <div>Profession: {profile.profession}</div>
-                    <div>Identifies as: {profile.gender}</div>
-                    <div>My share of rent will be: {profile.priceRange}</div>
-                    <div>Do I have any pets? {profile.pets}</div>
-                    <button
-                      onClick={() =>
-                        this.yesHandler(profile.username, this.props.username)
-                      }
-                    >
-                      Yes!
-                    </button>
-                    <button
-                      onClick={() =>
-                        this.noHandler(profile.username, this.props.username)
-                      }
-                    >
-                      No.
-                    </button>
-                  </div>
+              <div className="background-profileDisplay">
+                <div className="profile-container">
+                  <div className="profile">
+                    <img src={profile.image} padding="25px" />
+                    <div className="personal-info-container">
+                      <h1>{profile.firstName}</h1>
+                      <h2>Age, {profile.age}</h2>
+                      <div>
+                        <div>Profession: {profile.profession}</div>
+                        <div>Identifies as: {profile.gender}</div>
+                        <div>
+                          My share of rent will be: {profile.priceRange}
+                        </div>
+                        <div>Do I have any pets? {profile.pets}</div>
+                        <button
+                          onClick={() =>
+                            this.yesHandler(
+                              profile.username,
+                              this.props.username
+                            )
+                          }
+                        >
+                          Yes!
+                        </button>
+                        <button
+                          onClick={() =>
+                            this.noHandler(
+                              profile.username,
+                              this.props.username
+                            )
+                          }
+                        >
+                          No.
+                        </button>
+                      </div>
 
-                  <div>
-                    {" "}
-                    Preferences:
-                    <div>{profile.preferences}</div>
+                      <div>
+                        {" "}
+                        Preferences:
+                        <div>{profile.preferences}</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

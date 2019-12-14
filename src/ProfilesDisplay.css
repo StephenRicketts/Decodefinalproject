@@ -1,4 +1,19 @@
-.profile-container {
+.background-profileDisplay {
+  background-image: url(https://images.unsplash.com/photo-1445296608114-4b8fabe48256?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1955&q=80);
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+
+  background-size: 100% 100%;
+}
+
+.profile {
   border: 1px solid;
   background: white;
+}
+.profile-container {
+  display: flex;
+  width: 350px;
+  background-repeat: no-repeat;
 }

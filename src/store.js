@@ -31,6 +31,7 @@ let reducer = (state, action) => {
       profile: action.profile
     };
   }
+
   return state;
 };
 
