@@ -50,31 +50,34 @@ class UnconnectedMessenger extends Component {
   };
   render() {
     return (
-      <div className="messenger-container">
-        <div className="messenger-display">
-          <div>
-            <ul>
-              {this.state.messagesToDisplay.map(messageObject => {
-                return (
-                  <li>
-                    <div>{messageObject.message}</div>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-          <form onSubmit={this.messageSubmitHandler}>
+      <div>
+        <div className="messenger-container">
+          <div className="messenger-display">
             <div>
+              <ul className="messenger-list">
+                {this.state.messagesToDisplay.map(messageObject => {
+                  return (
+                    <li>
+                      <div>{messageObject.message}</div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div className="chat-box">
+          <form onSubmit={this.messageSubmitHandler}>
+            <div className="inputs-messenger">
               <input
                 type="text"
                 onChange={this.messageHandler}
                 value={this.state.message}
               />
-              <input type="submit" value="send" />
+              <input type="submit" value="send" className="send-button" />
             </div>
           </form>
         </div>
-        <div></div>
       </div>
     );
   }

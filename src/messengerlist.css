@@ -1,0 +1,49 @@
+.profile-list-container {
+  background: white;
+}
+.box-container {
+  display: columns;
+  justify-content: center;
+}
+.list-container {
+  left: 450px;
+  font-size: 20px;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  padding: 50px;
+  margin-top: 300px;
+  position: absolute;
+  float: right;
+  box-shadow: 5px 5px;
+  border-radius: 10px 50px 10px 50px;
+  width: 1200px;
+  border: solid 5px yellow;
+  background: white;
+  list-style-type: none;
+}
+.list-items {
+  border: 5px solid black;
+  padding: 20px;
+  border-radius: 50px 10px 50px 10px;
+}
+.header {
+  left: 300px;
+  font-size: 40px;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  padding: 50px;
+  margin-top: 75px;
+  position: absolute;
+  float: right;
+  box-shadow: 5px 5px;
+  border-radius: 10px 50px 10px 50px;
+  width: 500px;
+  border: solid 5px black;
+  background: white;
+  list-style-type: none;
+}
+.link {
+  font-size: 25px;
+  text-decoration: none;
+  color: black;
+}

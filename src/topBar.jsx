@@ -41,7 +41,7 @@ class UnconnectedTopBar extends Component {
           </Link>
         </div>
         <div>
-          <button onClick={this.logoutHandler}>
+          <button onClick={this.logoutHandler} className="logoutButton">
             <img
               src="http://pixsector.com/cache/d740a866/av2ea632ff425acf36dbb.png"
               align="right"

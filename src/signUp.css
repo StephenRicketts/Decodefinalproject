@@ -1,4 +1,5 @@
 .signup-form {
+  font-size: 20px;
   padding: 20px;
   width: 700px;
   top: 200px;
@@ -18,6 +19,7 @@
 }
 .sign-up-questions {
   position: absolute;
+  font-size: 20px;
   left: 20%;
   box-shadow: 2px 2px 2px;
   display: flex;
@@ -49,4 +51,21 @@
   left: 1300px;
   height: 600px;
   border: solid 5px yellow;
+}
+.signup-button {
+  border: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 0px 10px;
+  margin-top: 10px;
+  color: #fff;
+  background: rgb(228, 190, 85);
+  font-weight: 500;
+  border: 1px solid rgb(240, 198, 82);
+  border-left: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  min-height: 40px;
+  height: auto;
+  border-radius: 50px 50px 50px 50px !important;
+  font-size: medium;
 }

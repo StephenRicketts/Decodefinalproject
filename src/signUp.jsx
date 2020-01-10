@@ -165,40 +165,58 @@ class UnconnectedRoomateSignup extends Component {
               <h1>Personal info here!</h1>
               <div>
                 Please create a username, this will be used to sign in.
-                <input type="text" onChange={this.handleUsernameChange} />
+                <div>
+                  <input type="text" onChange={this.handleUsernameChange} />
+                </div>
               </div>
               <div>
                 Please provide a password for your account.
-                <input type="text" onChange={this.handlePasswordChange} />
+                <div>
+                  <input type="text" onChange={this.handlePasswordChange} />
+                </div>
               </div>
               <div>
                 What is your first name? This will be presented on your profile.
-                <input type="text" onChange={this.handleNameChange} />
+                <div>
+                  <input type="text" onChange={this.handleNameChange} />
+                </div>
               </div>
               <div>
                 What city or town are you looking for find an apartment in?
-                <input type="text" onChange={this.locationHandler} />
+                <div>
+                  <input type="text" onChange={this.locationHandler} />
+                </div>
               </div>
               <div>
                 Please provide a valid email address.
-                <input type="text" onChange={this.handleEmailChange} />
+                <div>
+                  <input type="text" onChange={this.handleEmailChange} />
+                </div>
                 <div>
                   Please provide your age, this will be presented on your
                   profile.
-                  <input type="number" onChange={this.handleAgeChange} />
+                  <div>
+                    <input type="number" onChange={this.handleAgeChange} />
+                  </div>
                 </div>
                 <div>
                   Please provide roughly the ammount you are looking to spend on
                   your share of rent per month.
-                  <input type="text" onChange={this.handlePriceRangeChange} />
+                  <div>
+                    <input type="text" onChange={this.handlePriceRangeChange} />
+                  </div>
                 </div>
                 <div>
                   What is your current profession?
-                  <input type="text" onChange={this.handleProfessionChange} />
+                  <div>
+                    <input type="text" onChange={this.handleProfessionChange} />
+                  </div>
                 </div>
                 <div>
                   How do you identify in terms of gender?
-                  <input type="text" onChange={this.handleGenderChange} />
+                  <div>
+                    <input type="text" onChange={this.handleGenderChange} />
+                  </div>
                 </div>
                 <div>
                   Please provide a photograph of yourself to be presented on
@@ -211,21 +229,31 @@ class UnconnectedRoomateSignup extends Component {
               <div>
                 Do you have pets? if not, are you okay with living with other
                 people's pets?
-                <input type="text" onChange={this.handlePetsChange} />
+                <div>
+                  <input type="text" onChange={this.handlePetsChange} />
+                </div>
               </div>
               <div>
                 What is your astrological sign? Maybe also let potential
                 roommates know if you think this question is irrelevant.
-                <input type="text" onChange={this.handleAstroSignChange} />
+                <div>
+                  <input type="text" onChange={this.handleAstroSignChange} />
+                </div>
               </div>
               <div>
                 Finally, please provide your potential Roommates with any
                 additional info you think may be relevant.
-                <input type="text" onChange={this.preferencesHandler} />
+                <div>
+                  <input type="text" onChange={this.preferencesHandler} />
+                </div>
               </div>
             </div>
             <div className="sign-up-button-container">
-              <input type="submit" value="Creat your profile" />
+              <input
+                type="submit"
+                value="Creat your profile"
+                className="signup-button"
+              />
             </div>
           </form>
         </div>

@@ -7,14 +7,19 @@ class UnconnectedProfilesDisplay extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      profiles: []
+      profiles: [],
+      seenProfiles: []
     };
   }
+
   componentDidMount = async () => {
+    console.log("component did mount hit");
     let response = await fetch("/allprofiles");
     let responseBody = await response.text();
     let parsedProfiles = JSON.parse(responseBody);
     this.setState({ profiles: parsedProfiles });
+    // this.setState({ profileToView: parsedProfiles.shift() });
+    // console.log("this is the profileToView", this.state.profileToView);
     let matchesData = new FormData();
     matchesData.append("username", this.props.username);
     let matchesResponse = await fetch("/allmatches", {
@@ -46,7 +51,12 @@ class UnconnectedProfilesDisplay extends Component {
       allMatches: parsedMatchProfiles.profiles
     });
   };
+
   yesHandler = async (to, from) => {
+    this.setState({
+      seenProfiles: this.state.seenProfiles.concat(to)
+    });
+
     let data = new FormData();
     data.append("from", from);
     data.append("to", to);
@@ -76,8 +86,35 @@ class UnconnectedProfilesDisplay extends Component {
         type: "matched-profile",
         matchedProfile: parsedMatchedProfile
       });
+
       return;
     }
+  };
+  noHandler = async (candidate, user) => {
+    console.log("no button");
+    // let data = new FormData();
+    // data.append("candidate", candidate);
+    // console.log("candidate", candidate);
+    // data.append("user", user);
+    // console.log("user", user);
+    // let response = await fetch("/seenProfiles", {
+    //   method: "POST",
+    //   body: data,
+    //   credentials: "include"
+    // });
+    // console.log("after fetch call");
+    // let responseBody = await response.text();
+    // let body = JSON.parse(responseBody);
+    // console.log("this is no handler body", body);
+    // if (body.success) {
+    //   console.log("profile listed in seen database");
+    //   this.setState({ seenProfiles: candidate });
+    //   return;
+    // }
+    // return;
+    this.setState({
+      seenProfiles: this.state.seenProfiles.concat(candidate)
+    });
   };
 
   render() {
@@ -85,9 +122,13 @@ class UnconnectedProfilesDisplay extends Component {
       <div>
         <div>
           {this.state.profiles.map(profile => {
-            console.log("image", profile.image);
             if (profile.username === this.props.profile.username) {
               return;
+            }
+            for (let x = 0; x < this.state.seenProfiles.length; x++) {
+              if (profile.username === this.state.seenProfiles[x]) {
+                return;
+              }
             }
             return (
               <div className="background-profileDisplay">
@@ -95,6 +136,10 @@ class UnconnectedProfilesDisplay extends Component {
                   <div className="profile">
                     <img src={profile.image} padding="25px" />
                     <div className="personal-info-container">
+                      {console.log(
+                        "this should be danlel",
+                        this.state.profileToView
+                      )}
                       <h1>{profile.firstName}</h1>
                       <h2>Age, {profile.age}</h2>
                       <div>
@@ -104,6 +149,14 @@ class UnconnectedProfilesDisplay extends Component {
                           My share of rent will be: {profile.priceRange}
                         </div>
                         <div>Do I have any pets? {profile.pets}</div>
+                      </div>
+
+                      <div>
+                        {" "}
+                        Preferences:
+                        <div>{profile.preferences}</div>
+                      </div>
+                      <div className="button-container">
                         <button
                           onClick={() =>
                             this.yesHandler(
@@ -111,6 +164,7 @@ class UnconnectedProfilesDisplay extends Component {
                               this.props.username
                             )
                           }
+                          className="yes-button"
                         >
                           Yes!
                         </button>
@@ -121,15 +175,10 @@ class UnconnectedProfilesDisplay extends Component {
                               this.props.username
                             )
                           }
+                          className="no-button"
                         >
                           No.
                         </button>
-                      </div>
-
-                      <div>
-                        {" "}
-                        Preferences:
-                        <div>{profile.preferences}</div>
                       </div>
                     </div>
                   </div>

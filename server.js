@@ -40,6 +40,23 @@ MongoClient.connect(
 let generateId = () => {
   return "" + Math.floor(Math.random() * 100000000);
 };
+// app.post("/seenProfiles", upload.none(), (req, res) => {
+//   console.log("seenProfiles server hit");
+//   let candidate = req.body.candidate;
+//   let user = req.body.user;
+//   dbo
+//     .collection("seenProfiles")
+//     .insertOne({ candidate: candidate, user: user }),
+//     (err, seenProfile) => {
+//       if (err) {
+//         console.log("error inserting seenProfile");
+//         return;
+//       }
+//       console.log("seenProfile inserted");
+//       res.send(JSON.stringify({ success: true }));
+//       return;
+//     };
+// });
 
 app.post("/getRelevantMessages", upload.none(), (req, res) => {
   console.log("getRelevantMessages server hit");
@@ -74,6 +91,7 @@ app.post("/messages", upload.none(), (req, res) => {
         return;
       }
       console.log("message inserted");
+      res.json({ success: true });
       return;
     };
 });
